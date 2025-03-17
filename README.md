@@ -5,7 +5,6 @@
     - [Installation](#installation)
   - [Usage](#usage)
     - [Examples using Basic API Functions](#examples-using-basic-api-functions)
-    - [Advanced Variants](#advanced-variants)
   - [Running Unit Tests](#running-unit-tests)
     - [Instructions](#instructions)
   - [Credits \& References](#credits--references)
@@ -109,63 +108,89 @@ Include the header file in your project:
 
 ### Examples using Basic API Functions
 
-`**This section may be out of date**`
+- **Creating a Table:**
 
-- Create a Table:
+  You create a table by specifying the capacity, the variant, and a target load factor. Note that the TINY_PTR_SIMPLE variant supports resizing, while TINY_PTR_FIXED and TINY_PTR_VARIABLE do not.
+  
     ```c
+    // Create a SIMPLE variant table (supports resizing)
     size_t capacity = 1024;
-    double load_factor = 0.9; // For advanced variants (ignored for simple variant)
+    double load_factor = 0.9;
     tiny_ptr_table_t *table = tiny_ptr_create(capacity, TINY_PTR_SIMPLE, load_factor);
     if (!table) {
-      // handle error
+        // Handle error: table creation failed.
+    }
+
+    // Alternatively, create tables for the other variants:
+    // Fixed variant (no resizing)
+    tiny_ptr_table_t *fixed_table = tiny_ptr_create(capacity, TINY_PTR_FIXED, load_factor);
+    if (!fixed_table) {
+        // Handle error
+    }
+
+    // Variable variant (no resizing)
+    tiny_ptr_table_t *variable_table = tiny_ptr_create(capacity, TINY_PTR_VARIABLE, load_factor);
+    if (!variable_table) {
+        // Handle error
     }
     ```
 
-- Allocate an Entry:
-    ```c
-    int key = 1234;
-    int value = key * 10;
-    int tiny_ptr = tiny_ptr_allocate(table, key, value);
-    if (tiny_ptr == -1) {
-        // Allocation failed.
-    }
-    ```
+- **Allocating an Entry:**
 
-- Dereference an Entry:
-    ```c
-    int retrieved_value = tiny_ptr_dereference(table, key, tiny_ptr);
-    if (retrieved_value == -1) {
-        // Dereference error.
-    }
-    ```
+  Allocate an entry by providing a key and a value. The function returns a tiny pointer (as an integer) that uniquely identifies the allocated slot. A return value of -1 indicates a failure (e.g., due to capacity limits or collisions).
 
-- Free an Entry:
-    ```c
-    tiny_ptr_free(table, key, tiny_ptr);
-    ```
+  ```c
+  int key = 1234;
+  int value = key * 10;
+  int tp = tiny_ptr_allocate(table, key, value);
+  if (tp == -1) {
+      // Allocation failed.
+  }
+  ```
 
-- Resize the Table (Simple Variant Only):
-    ```c
-    if (tiny_ptr_resize(table, capacity * 2) != 0) {
-        // Resizing failed.
-    }
-    ```
+- **Dereferencing an Entry:**
 
-- Destroy the Table:
-    ```c
-    tiny_ptr_destroy(table);
-    ```
+  Retrieve the stored value by providing the key and the tiny pointer. If the operation fails, the function returns -1.
 
-### Advanced Variants
+  ```c
+  int retrieved_value = tiny_ptr_dereference(table, key, tp);
+  if (retrieved_value == -1) {
+      // Dereference error.
+  }
+  ```
 
-To use the Fixed or Variable variant, specify the corresponding `TinyPtrVariant` when creating the table:
+- **Freeing an Entry:**
 
-```c
-tiny_ptr_table_t *fixed_table = tiny_ptr_create(capacity, TINY_PTR_FIXED, load_factor);
-tiny_ptr_table_t *variable_table = tiny_ptr_create(capacity, TINY_PTR_VARIABLE, load_factor);
-```
+  Free the entry associated with a given key and tiny pointer. This makes the slot available for future allocations.
+
+  ```c
+  tiny_ptr_free(table, key, tp);
+  // After freeing, the slot is reset (commonly to 0) and can be reallocated.
+  ```
+
+- **Resizing the Table (SIMPLE Variant Only):**
+
+  Only the SIMPLE variant supports dynamic resizing. This function creates a new table with increased capacity, rehashing all current entries. It returns 0 on success.
+
+  ```c
+  if (tiny_ptr_resize(&table, capacity * 2) != 0) {
+      // Resizing failed.
+  }
+  ```
+
+- **Destroying the Table:**
+
+  Clean up the table and release all associated resources.
+
+  ```c
+  tiny_ptr_destroy(table);
+  ```
+
+---
 
 Each variant uses a slightly different internal encoding for the tiny pointer (e.g. extra bits to indicate sub–table or level). The API remains the same, ensuring transparent use of the underlying data structure.
+
+---
 
 ## Running Unit Tests
 
