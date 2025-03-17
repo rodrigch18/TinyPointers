@@ -1,0 +1,51 @@
+name: Build and Run Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  make_simple:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Simple
+      run: make simple
+  make_fixed:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Fixed
+      run: make fixed
+  make_variable:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Variable
+      run: make variable
+  test_simple:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build gtest
+      run: make build_gtest
+    - name: Build Tests for Simple and Run
+      run: make test_simple
+  test_fixed:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build gtest
+      run: make build_gtest
+    - name: Build Tests for Fixed and Run
+      run: make test_fixed
+  test_variable:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build gtest
+      run: make build_gtest
+    - name: Build Tests for Variable and Run
+      run: make test_variable
