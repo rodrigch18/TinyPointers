@@ -1,0 +1,25 @@
+# Ignore build directories
+**/build/**
+**/bin/**
+**/out/**
+
+# Ignore generated object files and executables
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
+*.exe
+*.out
+*.app
+
+# Ignore temporary files and logs
+*.tmp
+*.log
+*~
+
+# Ignore editor and OS-specific files
+*.swp
+.DS_Store
