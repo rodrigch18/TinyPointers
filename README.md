@@ -240,7 +240,7 @@ This library is inspired by the research paper:
 <p><strong>Tiny Pointers</strong><br>
 <i>Michael A. Bender, Alex Conway, Martín Farach-Colton, William Kuszmaul, Guido Tagliavini</i><br>
 ACM Trans. Algor. 2024<br>
-<a href="[url](https://dl.acm.org/doi/10.1145/3700594)">DOI: 10.1145/3700594</a></p>
+<a href="https://dl.acm.org/doi/10.1145/3700594">DOI: 10.1145/3700594</a></p>
 
 The original work introduces the concept of using compressed pointer representations (tiny pointers) to achieve near–optimal space efficiency in various data–structural applications. This library builds upon those ideas and provides a production–quality implementation.
 
