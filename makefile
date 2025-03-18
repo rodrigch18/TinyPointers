@@ -43,7 +43,7 @@ GTEST_SRC = $(GTEST_DIR)/src/gtest-all.cc
 GTEST_OBJS = $(BUILD_DIR)/gtest-all.o
 LIB_GTEST = $(BUILD_DIR)/libgtest.a
 
-.PHONY: all simple fixed variable clean tests build_gtest build_unified test_simple test_fixed test_variable
+.PHONY: all simple fixed variable clean tests test_simple test_fixed test_variable
 
 all: $(LIB_SIMPLE) $(LIB_FIXED) $(LIB_VARIABLE) $(LIB_UNIFIED)
 
@@ -90,23 +90,19 @@ $(LIB_UNIFIED): $(BUILD_DIR)/tiny_ptr_simple.o $(BUILD_DIR)/tiny_ptr_fixed.o $(B
 	$(AR) $@ $^
 
 # Test targets
-build_gtest: $(LIB_GTEST)
-
-build_unified: $(LIB_UNIFIED)
-
-test_simple: $(LIB_SIMPLE)
+test_simple: $(LIB_GTEST) $(LIB_SIMPLE) $(LIB_UNIFIED)
 	$(CXX) $(CXXFLAGS) -I$(GTEST_DIR)/include $(TEST_DIR)/test_tiny_ptr_simple.cpp -L$(BUILD_DIR) $(LIB_UNIFIED) $(LIB_GTEST) -lpthread -o $(TEST_SIMPLE)
 	./$(TEST_SIMPLE)
 
-test_fixed: $(LIB_FIXED)
+test_fixed: $(LIB_GTEST) $(LIB_FIXED) $(LIB_UNIFIED)
 	$(CXX) $(CXXFLAGS) -I$(GTEST_DIR)/include $(TEST_DIR)/test_tiny_ptr_fixed.cpp -L$(BUILD_DIR) $(LIB_UNIFIED) $(LIB_GTEST) -lpthread -o $(TEST_FIXED)
 	./$(TEST_FIXED)
 
-test_variable: $(LIB_VARIABLE)
+test_variable: $(LIB_GTEST) $(LIB_VARIABLE) $(LIB_UNIFIED)
 	$(CXX) $(CXXFLAGS) -I$(GTEST_DIR)/include $(TEST_DIR)/test_tiny_ptr_variable.cpp -L$(BUILD_DIR) $(LIB_UNIFIED) $(LIB_GTEST) -lpthread -o $(TEST_VARIABLE)
 	./$(TEST_VARIABLE)
 
-tests: build_gtest build_unified test_simple test_fixed test_variable
+tests: test_simple test_fixed test_variable
 
 clean:
 	rm -rf $(BUILD_DIR)
