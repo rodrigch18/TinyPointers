@@ -1,5 +1,5 @@
 extern "C" {
-    #include "tiny_ptr.h"
+    #include "tiny_ptr_unified.h"
 }
 #include <gtest/gtest.h>
 #include <thread>
