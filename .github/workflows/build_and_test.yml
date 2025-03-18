@@ -31,32 +31,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    # Update references
-    - name: Git Submodule Update
-      run: |
-        git pull --recurse-submodules
-        git submodule update --remote --recursive
+      with:
+        submodules: true
     - name: Build Tests for Simple and Run
       run: make test_simple
   test_fixed:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    # Update references
-    - name: Git Submodule Update
-      run: |
-        git pull --recurse-submodules
-        git submodule update --remote --recursive
+      with:
+        submodules: true
     - name: Build Tests for Fixed and Run
       run: make test_fixed
   test_variable:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    # Update references
-    - name: Git Submodule Update
-      run: |
-        git pull --recurse-submodules
-        git submodule update --remote --recursive
+      with:
+        submodules: true
     - name: Build Tests for Variable and Run
       run: make test_variable
